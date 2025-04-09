@@ -9,13 +9,19 @@ export default function PageHeader({ className }) {
   return (
     <header className={`flex justify-between items-center ${className}`}>
       <Link
-        href="/dashboard"
+        href="/"
         className="text-xl hover:underline underline-offset-8 decoration-2"
       >
-        Blog App
+        Home
       </Link>
 
       <div className="flex items-center">
+        <Link
+          href="/dashboard"
+          className="text-xl hover:underline underline-offset-8 decoration-2"
+        >
+          Blog
+        </Link>
         <DarkModeToggle defaultMode={theme} />
         <UserInfo />
       </div>

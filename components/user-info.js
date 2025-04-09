@@ -25,8 +25,17 @@ export default function UserInfo() {
   }
 
   return (
-    <Link href="/login" className={`${variants["ghost"]} ${sizes["sm"]}`}>
-      <KeyRound className="w-6 h-6" />
-    </Link>
+    <>
+      <Link
+        href="/signup"
+        className={`flex items-center space-x-1 ${variants["ghost"]} ${sizes["sm"]}`}
+      >
+        <Avatar />
+        <span>Signup</span>
+      </Link>
+      <Link href="/login" className={`${variants["ghost"]} ${sizes["sm"]}`}>
+        <KeyRound className="w-6 h-6" />
+      </Link>
+    </>
   );
 }
