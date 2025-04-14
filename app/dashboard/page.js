@@ -9,7 +9,7 @@ import { sizes, variants } from "@/lib/variants";
 import { ErrorBoundary } from "react-error-boundary";
 import { types } from "@/lib/consts";
 // import Range from "./components/range";
-// import TransactionListWrapper from "./components/transaction-list-wrapper";
+import TransactionListWrapper from "./components/transaction-list-wrapper";
 import useAuthStore from "@/store/useAuthStore";
 
 export default function Page({ searchParams }) {
@@ -25,25 +25,10 @@ export default function Page({ searchParams }) {
         </aside>
       </section>
 
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-        {types.map((type) => (
-          <ErrorBoundary
-            key={type}
-            fallback={
-              <div className="text-red-500">Cannot fetch {type} trend data</div>
-            }
-          >
-            <Suspense fallback={<TrendFallback />}>
-              {/* <Trend type={type} range={range} /> */}
-            </Suspense>
-          </ErrorBoundary>
-        ))}
-      </section>
-
       <section className="flex justify-between items-center">
         <h2 className="text-2xl">Blogs</h2>
         <Link
-          href="/dashboard/transaction/add"
+          href="/dashboard/blog/add"
           className={`flex items-center space-x-1 ${variants["outline"]} ${sizes["sm"]}`}
         >
           <PlusCircle className="w-4 h-4" />
@@ -52,7 +37,7 @@ export default function Page({ searchParams }) {
       </section>
 
       <Suspense fallback={<TransactionListFallback />}>
-        {/* <TransactionListWrapper range={range} /> */}
+        <TransactionListWrapper />
       </Suspense>
     </div>
   );

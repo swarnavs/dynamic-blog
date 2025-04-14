@@ -7,8 +7,12 @@ module.exports = {
           remotePatterns: [
             {
               protocol: "http",
-              hostname: "localhost",
-              port: "5000",
+              hostname: "**",
+              pathname: "/src/uploads/**",
+            },
+            {
+              protocol: "https",
+              hostname: "**",
               pathname: "/src/uploads/**",
             },
           ],
