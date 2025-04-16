@@ -1,9 +1,7 @@
-import { fetchPostList } from "@/lib/api/post";
 import TransactionList from "./post-list";
-import useAuthStore from "@/store/useAuthStore";
+import { fetchPost } from "@/lib/actions";
 
-export default async function TransactionListWrapper() {
-  const { token } = useAuthStore();
-  const response = await fetchPostList(token);
+export default function TransactionListWrapper() {
+  const response = fetchPost();
   return <TransactionList initialTransactions={response.data.post} />;
 }
