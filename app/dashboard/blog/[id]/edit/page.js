@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { postDetails } from "@/lib/api/post";
 
 export default async function Page({ params: { id } }) {
-  const token = cookies().get("auth-token")?.value;
+  const token = cookies().get("auth-token")?.value ?? null;
   const { data, error } = await postDetails(id, token);
 
   if (error) notFound();
