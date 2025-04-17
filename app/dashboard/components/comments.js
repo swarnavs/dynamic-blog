@@ -4,10 +4,10 @@ import Input from "@/components/input";
 import Label from "@/components/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { transactionSchema } from "@/lib/validation";
+import { commentSchema } from "@/lib/validation";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-// import { createTransaction, updateTransaction } from "@/lib/actions";
+import { addComment } from "@/lib/actions";
 import FormError from "@/components/form-error";
 
 export default function TransactionForm({ initialData }) {
@@ -19,31 +19,30 @@ export default function TransactionForm({ initialData }) {
     formState: { errors },
   } = useForm({
     mode: "onTouched",
-    resolver: zodResolver(transactionSchema),
-    defaultValues: initialData ?? {
-      created_at: new Date().toISOString().split("T")[0],
-    },
+    resolver: zodResolver(commentSchema),
   });
   const router = useRouter();
   const [isSaving, setSaving] = useState(false);
   const [lastError, setLastError] = useState();
-  const editing = Boolean(initialData);
+  const [comments, setComments] = useState(initialData.comments || []);
 
   const onSubmit = async (data) => {
     setSaving(true);
     setLastError();
-    // try {
-    //   if (editing) {
-    //     await updateTransaction(initialData._id, data);
-    //   } else {
-    //     await createTransaction(data);
-    //   }
-    //   router.push("/dashboard");
-    // } catch (error) {
-    //   setLastError(error);
-    // } finally {
-    //   setSaving(false);
-    // }
+    try {
+      const response = await addComment(data, initialData._id);
+      const newComment = {
+        _id: Date.now(), // Ideally from response (e.g., response.comment._id)
+        content: data.content,
+      };
+
+      setComments((prev) => [...prev, newComment]); // append new comment
+      setValue("content", "");
+    } catch (error) {
+      setLastError(error);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -58,16 +57,13 @@ export default function TransactionForm({ initialData }) {
       <div>
         <h2 className="text-xl font-semibold mb-4">Comments</h2>
         <div className="space-y-4">
-          {initialData.comments.length > 0 ? (
-            initialData.comments.map((comment) => (
+          {comments.length > 0 ? (
+            comments.map((comment) => (
               <div
                 key={comment._id}
                 className="border p-4 rounded-md shadow-sm"
               >
                 <p className="text-sm text-gray-800">{comment.content}</p>
-                {/* <p className="text-xs text-gray-500 mt-1">
-                  — {comment.author} · {formatDate(comment.createdAt)}
-                </p> */}
               </div>
             ))
           ) : (
@@ -83,11 +79,13 @@ export default function TransactionForm({ initialData }) {
           id="comment"
           type="text"
           placeholder="Write your comment..."
-          {...register("comment")}
+          {...register("content")}
         />
         <FormError error={errors.comment} />
         <div className="flex justify-end">
-          <Button type="submit">Submit Comment</Button>
+          <Button disabled={isSaving} type="submit">
+            Submit Comment
+          </Button>
         </div>
       </form>
     </section>

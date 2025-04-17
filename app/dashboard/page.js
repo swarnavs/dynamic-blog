@@ -1,29 +1,15 @@
-"use client";
 import { Suspense } from "react";
 import TransactionListFallback from "./components/transaction-list-fallback";
-// import Trend from "./components/trend";
-import TrendFallback from "./components/trend-fallback";
 import Link from "next/link";
 import { PlusCircle } from "lucide-react";
 import { sizes, variants } from "@/lib/variants";
-import { ErrorBoundary } from "react-error-boundary";
-import { types } from "@/lib/consts";
-// import Range from "./components/range";
 import TransactionListWrapper from "./components/transaction-list-wrapper";
-import useAuthStore from "@/store/useAuthStore";
+import BlogSummery from "./components/blog-summery";
 
 export default function Page({ searchParams }) {
-  const { user, token } = useAuthStore();
-
   return (
     <div className="space-y-8">
-      <section className="flex justify-between items-center">
-        <h1 className="text-4xl font-semibold">Summary</h1>
-        <aside>
-          {/* <Range defaultView={settings?.defaultView} /> */}
-          <h1>Hello, {user?.username}</h1>
-        </aside>
-      </section>
+      <BlogSummery />
 
       <section className="flex justify-between items-center">
         <h2 className="text-2xl">Blogs</h2>
