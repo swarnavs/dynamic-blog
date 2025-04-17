@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { transactionSchema } from "@/lib/validation";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createTransaction, updateTransaction } from "@/lib/actions";
+// import { createTransaction, updateTransaction } from "@/lib/actions";
 import FormError from "@/components/form-error";
 
 export default function TransactionForm({ initialData }) {
@@ -20,9 +20,6 @@ export default function TransactionForm({ initialData }) {
   } = useForm({
     mode: "onTouched",
     resolver: zodResolver(transactionSchema),
-    defaultValues: initialData ?? {
-      created_at: new Date().toISOString().split("T")[0],
-    },
   });
   const router = useRouter();
   const [isSaving, setSaving] = useState(false);
@@ -32,18 +29,18 @@ export default function TransactionForm({ initialData }) {
   const onSubmit = async (data) => {
     setSaving(true);
     setLastError();
-    try {
-      if (editing) {
-        await updateTransaction(initialData.id, data);
-      } else {
-        await createTransaction(data);
-      }
-      router.push("/dashboard");
-    } catch (error) {
-      setLastError(error);
-    } finally {
-      setSaving(false);
-    }
+    // try {
+    //   if (editing) {
+    //     await updateTransaction(initialData.id, data);
+    //   } else {
+    //     await createTransaction(data);
+    //   }
+    //   router.push("/dashboard");
+    // } catch (error) {
+    //   setLastError(error);
+    // } finally {
+    //   setSaving(false);
+    // }
   };
 
   return (
