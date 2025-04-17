@@ -1,4 +1,4 @@
-import Comments from "@/app/dashboard/components/comments";
+import Comments from "../../../components/comments";
 import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { postDetails } from "@/lib/api/post";

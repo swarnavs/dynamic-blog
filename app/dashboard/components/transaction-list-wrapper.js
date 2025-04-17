@@ -1,8 +1,10 @@
 import TransactionList from "./post-list";
-import { fetchPost } from "@/lib/actions";
+import { fetchPostList } from "@/lib/api/post";
+import { cookies } from "next/headers";
 
 export default async function TransactionListWrapper() {
-  const response = await fetchPost();
+  const token = cookies().get("auth-token")?.value ?? null;
+  const response = await fetchPostList(token);
   const posts = response?.data?.post || [];
   return <TransactionList initialTransactions={posts} />;
 }
