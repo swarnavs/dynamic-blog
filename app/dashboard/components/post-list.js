@@ -9,29 +9,37 @@ import useAuthStore from "@/store/useAuthStore";
 
 export default function TransactionList({ initialTransactions }) {
   const { token } = useAuthStore();
-  const [transactions, setTransactions] = useState(initialTransactions);
+  const [transactions, setTransactions] = useState(initialTransactions?.post);
+
   const [buttonHidden, setButtonHidden] = useState(
-    initialTransactions.length === 0
+    initialTransactions?.post.length === 0
   );
+  const [page, setPage] = useState(2);
   const [loading, setLoading] = useState(false);
 
   const handleClick = async () => {
+    const nextPage = page + 1;
     setLoading(true);
     let nextTransactions = null;
     try {
-      nextTransactions = await fetchPostList(token);
-      setButtonHidden(nextTransactions.data.post.length === 0);
+      nextTransactions = await fetchPostList(token, page);
+      setButtonHidden(
+        nextTransactions?.data?.totalPages === 0 ||
+          nextTransactions?.data?.totalPages ===
+            nextTransactions?.data?.currentPage
+      );
       setTransactions((prevTransactions) => [
         ...prevTransactions,
-        ...nextTransactions,
+        ...nextTransactions?.data?.post,
       ]);
+      setPage(nextPage);
     } finally {
       setLoading(false);
     }
   };
 
   const handleRemoved = (id) => () => {
-    setTransactions((prev) => [...prev].filter((t) => t.id !== id));
+    setTransactions((prev) => [...prev].filter((t) => t._id !== id));
   };
 
   return (

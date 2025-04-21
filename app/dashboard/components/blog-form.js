@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { transactionSchema } from "@/lib/validation";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-// import { createTransaction, updateTransaction } from "@/lib/actions";
+import { addCreatePost } from "@/lib/actions";
 import FormError from "@/components/form-error";
 
 export default function TransactionForm({ initialData }) {
@@ -29,18 +29,16 @@ export default function TransactionForm({ initialData }) {
   const onSubmit = async (data) => {
     setSaving(true);
     setLastError();
-    // try {
-    //   if (editing) {
-    //     await updateTransaction(initialData.id, data);
-    //   } else {
-    //     await createTransaction(data);
-    //   }
-    //   router.push("/dashboard");
-    // } catch (error) {
-    //   setLastError(error);
-    // } finally {
-    //   setSaving(false);
-    // }
+    try {
+      const response = await addCreatePost(data);
+      if (!response.error) {
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      setLastError(error.message);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -48,14 +46,14 @@ export default function TransactionForm({ initialData }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label className="mb-1">Title</Label>
-          <Input type="text" {...register("amount")} />
-          <FormError error={errors.amount} />
+          <Input type="text" {...register("title")} />
+          <FormError error={errors.title} />
         </div>
 
         <div className="col-span-1 md:col-span-2">
           <Label className="mb-1">Description</Label>
-          <Input {...register("description")} />
-          <FormError error={errors.description} />
+          <Input {...register("content")} />
+          <FormError error={errors.content} />
         </div>
       </div>
 

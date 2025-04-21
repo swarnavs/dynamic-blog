@@ -39,7 +39,7 @@ export default function TransactionForm({ initialData }) {
       setComments((prev) => [...prev, newComment]); // append new comment
       setValue("content", "");
     } catch (error) {
-      setLastError(error);
+      setLastError(error.message);
     } finally {
       setSaving(false);
     }
